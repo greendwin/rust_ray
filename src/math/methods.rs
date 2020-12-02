@@ -1,4 +1,4 @@
-use num::{Float, One, Zero};
+use num_traits::{Float, One, Zero};
 use std::f64::consts::PI;
 use std::ops::*;
 

@@ -8,16 +8,22 @@ version = "0.1.0"
 
 [dependencies]
 lazy_static = "1.4.0"
-num = "0.3"
+num-traits = "0.2"
 rand = "0.7.3"
 
 # utils
 num_cpus = "1.13.0"
 
-# parsing
-linked-hash-map = {version = "0.5.3", features = ["serde_impl"]}
-serde = {version = "1.0.117", features = ["derive"]}
-serde_yaml = "0.8.14"
+[dependencies.linked-hash-map]
+features = ["serde_impl"]
+version = "0.5.3"
+
+[dependencies.serde]
+features = ["derive"]
+version = "1.0.117"
+
+[dependencies.serde_yaml]
+version = "0.8.14"
 
 [lib]
 
