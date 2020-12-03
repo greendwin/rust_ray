@@ -73,6 +73,16 @@ enum ObjectConfig {
         center: (f64, f64, f64),
         radius: f64,
     },
+
+    #[serde(rename = "moving_sphere")]
+    MovingSphere {
+        material: String,
+        pos0: (f64, f64, f64),
+        pos1: (f64, f64, f64),
+        t0: f64,
+        t1: f64,
+        radius: f64,
+    },
 }
 
 #[derive(Deserialize)]
@@ -145,6 +155,31 @@ impl<'a> ParserPlugin<'a> for SceneLoader {
                             ParserError::Msg(format!("unknown material: {:?}", &material))
                         })?;
                         objs.push(SphereObject::new(center, radius, mat.clone()).into());
+                    }
+
+                    MovingSphere {
+                        material,
+                        pos0,
+                        pos1,
+                        t0,
+                        t1,
+                        radius,
+                    } => {
+                        let mat = mats.get(&material).ok_or_else(|| {
+                            ParserError::Msg(format!("unknown material: {:?}", &material))
+                        })?;
+
+                        objs.push(
+                            MovingSphereObject::new(
+                                pos0.into(),
+                                pos1.into(),
+                                t0,
+                                t1,
+                                radius,
+                                mat.clone(),
+                            )
+                            .into(),
+                        );
                     }
                 }
             }

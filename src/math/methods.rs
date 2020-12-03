@@ -48,17 +48,23 @@ where
 }
 
 pub trait InvLerp<U = Self> {
+    fn inv_lerp_unclamped(self, a: Self, b: Self) -> U;
     fn inv_lerp(self, a: Self, b: Self) -> U;
 }
 
 impl<T: Float> InvLerp for T {
     #[inline]
-    fn inv_lerp(self, a: Self, b: Self) -> Self {
+    fn inv_lerp_unclamped(self, a: Self, b: Self) -> Self {
         if a == b {
             return T::zero();
         }
 
         (self - a) / (b - a)
+    }
+
+    #[inline]
+    fn inv_lerp(self, a: Self, b: Self) -> Self {
+        self.clamp(a, b).inv_lerp_unclamped(a, b)
     }
 }
 

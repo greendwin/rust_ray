@@ -2,14 +2,16 @@ use crate::math::*;
 use crate::utils::rand_range;
 
 pub struct Camera {
-    origin: Vec3,
+    pub origin: Vec3,
+
+    pub u: Vec3,
+    pub v: Vec3,
+    pub lens_radius: f64,
+    pub time_range: (f64, f64),
+
     lower_left_corner: Vec3,
     horizontal: Vec3,
     vertical: Vec3,
-
-    u: Vec3,
-    v: Vec3,
-    lens_radius: f64,
 }
 
 fn random_vec3_in_unit_disk() -> Vec3 {
@@ -30,6 +32,7 @@ impl Camera {
         aspect_ratio: f64,
         aperture: f64,
         focus_dist: f64,
+        time_range: (f64, f64),
     ) -> Self {
         let theta = vfov_deg.deg_to_rad();
         let h = (theta / 2.0).tan();
@@ -53,6 +56,7 @@ impl Camera {
             u,
             v,
             lens_radius: aperture / 2.0,
+            time_range,
         }
     }
 
@@ -61,9 +65,12 @@ impl Camera {
         let offset = self.u * rd.x + self.v * rd.y;
 
         let next_orig = self.origin + offset;
+        let (t0, t1) = self.time_range;
+
         Ray::new(
             next_orig,
             self.lower_left_corner + self.horizontal * s + self.vertical * t - next_orig,
+            rand_range(t0, t1),
         )
     }
 }

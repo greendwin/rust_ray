@@ -13,6 +13,7 @@ struct CameraConfig {
     fov: Option<f64>,
     focus: Option<f64>,
     aperture: Option<f64>,
+    time_range: Option<(f64, f64)>,
 }
 
 pub struct CameraLoader {
@@ -29,6 +30,7 @@ impl CameraLoader {
                 fov: Some(90.0),
                 focus: Some(1.0),
                 aperture: Some(0.0),
+                time_range: Some((0.0, 0.0)),
             }),
         }
     }
@@ -44,6 +46,7 @@ impl CameraLoader {
             aspect_ratio,
             cfg.aperture.unwrap(),
             cfg.focus.unwrap(),
+            cfg.time_range.unwrap(),
         )
     }
 }
@@ -72,6 +75,9 @@ impl<'a> ParserPlugin<'a> for CameraLoader {
             }
             if data.aperture.is_some() {
                 cfg.aperture = data.aperture;
+            }
+            if data.time_range.is_some() {
+                cfg.time_range = data.time_range;
             }
 
             Ok(())

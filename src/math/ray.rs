@@ -34,13 +34,15 @@ pub trait HitRay<Mat> {
 pub struct Ray {
     pub orig: Vec3,
     pub dir: Vec3,
+    pub time: f64,
 }
 
 impl Ray {
-    pub fn new(origin: impl Into<Vec3>, direction: impl Into<Vec3>) -> Self {
+    pub fn new(origin: impl Into<Vec3>, direction: impl Into<Vec3>, time: impl Into<f64>) -> Self {
         Self {
             orig: origin.into(),
             dir: direction.into(),
+            time: time.into(),
         }
     }
 

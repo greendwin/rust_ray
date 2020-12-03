@@ -17,6 +17,21 @@ impl Vec3 {
     }
 
     #[inline]
+    pub fn x_axis() -> Self {
+        Self::new(1, 0, 0)
+    }
+
+    #[inline]
+    pub fn y_axis() -> Self {
+        Self::new(0, 1, 0)
+    }
+
+    #[inline]
+    pub fn z_axis() -> Self {
+        Self::new(0, 0, 1)
+    }
+
+    #[inline]
     pub fn new(x: impl Into<f64>, y: impl Into<f64>, z: impl Into<f64>) -> Self {
         Self {
             x: x.into(),

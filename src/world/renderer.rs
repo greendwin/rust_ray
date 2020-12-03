@@ -191,7 +191,7 @@ fn ray_color(ray: &Ray, ambient_grad: &(Vec3, Vec3), scene: &impl Scene, depth: 
                 color,
                 light_absorb,
             } => {
-                let light_amplify = calc_lighting(scatter.orig, scene) * light_absorb;
+                let light_amplify = calc_lighting(scatter.orig, scene, ray.time) * light_absorb;
                 color * (light_amplify + ray_color(&scatter, ambient_grad, scene, depth - 1))
             }
         };
@@ -202,7 +202,7 @@ fn ray_color(ray: &Ray, ambient_grad: &(Vec3, Vec3), scene: &impl Scene, depth: 
     t.lerp(ambient_grad.0, ambient_grad.1)
 }
 
-fn calc_lighting(pt: Vec3, scene: &impl Scene) -> Vec3 {
+fn calc_lighting(pt: Vec3, scene: &impl Scene, time: f64) -> Vec3 {
     if scene.lights().is_empty() {
         return Vec3::zero();
     }
@@ -211,7 +211,7 @@ fn calc_lighting(pt: Vec3, scene: &impl Scene) -> Vec3 {
 
     for lgt in scene.lights() {
         let lgt_pt = lgt.orig() + rand_vec3_in_unit_sphere() * lgt.radius();
-        let to_light = Ray::new(pt, lgt_pt - pt);
+        let to_light = Ray::new(pt, lgt_pt - pt, time);
 
         let mut in_shadow = false;
         for obj in scene.objs() {

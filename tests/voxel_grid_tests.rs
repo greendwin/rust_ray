@@ -62,7 +62,7 @@ fn voxel_objs() {
 }
 
 fn trace(pos: impl Into<Vec3>, dir: impl Into<Vec3>) -> Vec<usize> {
-    let ray = Ray::new(pos.into(), dir.into());
+    let ray = Ray::new(pos.into(), dir.into(), 0.0);
     let mut objs = HashSet::new();
     GRID.trace_objs(&ray, &mut objs);
 

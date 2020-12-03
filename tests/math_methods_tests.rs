@@ -45,12 +45,24 @@ fn inv_lerp_calc() {
     assert_eq!(10.0.inv_lerp(10.0, 20.0), 0.0);
     assert_eq!(20.0.inv_lerp(10.0, 20.0), 1.0);
     assert_eq!(15.0.inv_lerp(10.0, 20.0), 0.5);
-    assert_eq!(30.0.inv_lerp(10.0, 20.0), 2.0);
-    assert_eq!(0.0.inv_lerp(10.0, 20.0), -1.0);
+    assert_eq!(30.0.inv_lerp_unclamped(10.0, 20.0), 2.0);
+    assert_eq!(0.0.inv_lerp_unclamped(10.0, 20.0), -1.0);
 }
 
 #[test]
 fn inv_lerp_eq_ab() {
     assert_eq!(10.0.inv_lerp(10.0, 10.0), 0.0);
     assert_eq!(20.0.inv_lerp(10.0, 10.0), 0.0);
+}
+
+#[test]
+fn inv_lerp_clamp() {
+    assert_eq!(0.0.inv_lerp(10.0, 100.0), 0.0);
+    assert_eq!(200.0.inv_lerp(10.0, 100.0), 1.0);
+}
+
+#[test]
+fn inv_lerp_unclamped() {
+    assert_eq!(0.0.inv_lerp_unclamped(100.0, 200.0), -1.0);
+    assert_eq!(200.0.inv_lerp_unclamped(0.0, 100.0), 2.0);
 }

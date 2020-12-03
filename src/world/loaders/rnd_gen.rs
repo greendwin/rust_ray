@@ -9,7 +9,10 @@ use serde::Deserialize;
 #[serde(tag = "type")]
 enum MaterialRndConfig {
     #[serde(rename = "diff")]
-    DiffRnd { weight: f64 },
+    DiffRnd {
+        weight: f64,
+        move_range: Option<f64>,
+    },
 
     #[serde(rename = "metal")]
     MetalRnd { weight: f64 },
@@ -26,17 +29,26 @@ impl MaterialRndConfig {
     fn weight(&self) -> f64 {
         use MaterialRndConfig::*;
         match self {
-            DiffRnd { weight } | MetalRnd { weight } | Glass { weight, .. } => *weight,
+            DiffRnd { weight, .. } | MetalRnd { weight } | Glass { weight, .. } => *weight,
         }
     }
 
     fn make_sphere(&self, center: Vec3, radius: f64, scene: &SceneLoader) {
         use MaterialRndConfig::*;
         match self {
-            DiffRnd { .. } => {
+            DiffRnd { move_range, .. } => {
                 let albedo = rand_vec3(0, 1) * rand_vec3(0, 1);
-                let mat = DiffuseMat::new(albedo);
-                scene.add_obj(SphereObject::new(center, radius, mat));
+                let mat: SomeMaterial = DiffuseMat::new(albedo).into();
+
+                match *move_range {
+                    None => scene.add_obj(SphereObject::new(center, radius, mat)),
+                    Some(range) => {
+                        let center2 = center + Vec3::y_axis() * rand_range(0, range);
+                        scene.add_obj(MovingSphereObject::new(
+                            center, center2, 0.0, 1.0, radius, mat,
+                        ));
+                    }
+                }
             }
             MetalRnd { .. } => {
                 let albedo = rand_vec3(0.5, 1);

@@ -8,7 +8,8 @@ use rust_ray::world::*;
 use RenderProgress::*;
 
 // const SCENE_YAML: &str = include_str!("../shadow_scene.yaml");
-const SCENE_YAML: &str = include_str!("../random_shadows.yaml");
+// const SCENE_YAML: &str = include_str!("../random_scene.yaml");
+const SCENE_YAML: &str = include_str!("../random_scene_move.yaml");
 
 fn main() {
     let start_time = Instant::now();
@@ -27,6 +28,11 @@ fn main() {
 
     let scene = scene_loader.new_scene();
     let camera = camera_loader.new_camera(renderer_loader.aspect_ratio());
+    println!(
+        "time range: {}, {}",
+        camera.time_range.0, camera.time_range.1
+    );
+
     let mut image = renderer_loader.new_image();
     println!("image: {}, {}", image.width(), image.height());
 
